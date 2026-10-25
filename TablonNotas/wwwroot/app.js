@@ -1,0 +1,1 @@
+document.getElementById("estado").textContent = "JavaScript funcionando";
