@@ -1,2 +1,167 @@
-body { font-family: "Segoe UI", sans-serif; margin: 24px; }
-h1 { color: #2750d8; }
+/* ---------- Variables: aquí se cambia el aspecto de toda la app ---------- */
+:root {
+  --celda: 32px;            /* tamaño de cada celda de la cuadrícula */
+  --ancho-barra: 260px;
+
+  --fondo: #f7f8fa;
+  --barra: #eef0f4;
+  --texto: #1b2230;
+  --suave: #667085;
+  --borde: #d9dde5;
+  --punto: #c9ced8;
+  --acento: #2750d8;
+  --acento-texto: #ffffff;
+  --activo: #dfe5f7;
+
+  --nota-amarilla: #fff4bf;
+  --nota-azul: #dbe8ff;
+  --nota-verde: #d9f2df;
+  --nota-borde: rgba(27, 34, 48, 0.18);
+  --radio: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font: 14px/1.45 "Segoe UI", system-ui, sans-serif;
+}
+
+/* ---------- Estructura general ---------- */
+.app {
+  display: grid;
+  grid-template-columns: var(--ancho-barra) 1fr;
+  height: 100vh;
+}
+
+/* ---------- Barra lateral ---------- */
+.barra {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 12px;
+  background: var(--barra);
+  border-right: 1px solid var(--borde);
+  overflow-y: auto;
+}
+
+.barra-cabecera { display: grid; gap: 12px; padding: 0 4px; }
+.logo { margin: 0; font-size: 16px; font-weight: 700; }
+
+.btn-nuevo {
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--acento);
+  color: var(--acento-texto);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-nuevo:hover { filter: brightness(1.1); }
+
+.buscar { position: relative; }
+.buscar input {
+  width: 100%;
+  padding: 8px 56px 8px 10px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: var(--fondo);
+  color: var(--texto);
+  font: inherit;
+}
+.buscar kbd {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 1px 6px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  color: var(--suave);
+  font: 11px "Segoe UI", sans-serif;
+}
+
+.barra-nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+
+.seccion {
+  margin: 14px 8px 4px;
+  color: var(--suave);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.enlace {
+  display: block;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--texto);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.enlace:hover { background: var(--activo); }
+.enlace[aria-current="page"] { background: var(--activo); font-weight: 600; }
+.enlace:focus-visible, .btn-nuevo:focus-visible, .buscar input:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 1px;
+}
+
+.barra-pie {
+  display: grid;
+  gap: 2px;
+  padding-top: 8px;
+  border-top: 1px solid var(--borde);
+}
+
+/* ---------- Área principal ---------- */
+.principal { display: flex; flex-direction: column; min-width: 0; }
+
+.cabecera { padding: 20px 24px 12px; }
+.titulo { margin: 0; font-size: 22px; font-weight: 700; }
+.meta { margin: 2px 0 0; color: var(--suave); }
+
+/* ---------- Tablón: cuadrícula de celdas con puntos de guía ---------- */
+.tablon {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, var(--celda));
+  grid-auto-rows: var(--celda);
+  overflow: auto;
+  background-size: var(--celda) var(--celda);
+}
+
+.tablon[data-guia="puntos"] { background-image: radial-gradient(var(--punto) 1px, transparent 1px); }
+.tablon[data-guia="lineas"] { background-image: linear-gradient(var(--punto) 1px, transparent 1px), linear-gradient(90deg, var(--punto) 1px, transparent 1px); }
+.tablon[data-guia="ninguna"] { background-image: none; }
+
+/* ---------- Notas ---------- */
+.nota {
+  grid-column: var(--col) / span var(--ancho);
+  grid-row: var(--fila) / span var(--alto);
+  margin: 4px;
+  padding: 12px 14px;
+  overflow: hidden;
+  background: var(--color, var(--nota-amarilla));
+  border: 1px solid var(--nota-borde);
+  border-radius: var(--radio);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+.nota--amarilla { --color: var(--nota-amarilla); }
+.nota--azul { --color: var(--nota-azul); }
+.nota--verde { --color: var(--nota-verde); }
+
+.nota-titulo { margin: 0 0 6px; font-size: 15px; font-weight: 700; }
+.nota p { margin: 0 0 6px; }
+.nota-lista { margin: 0 0 6px; padding-left: 18px; }
+.nota-fecha { margin-top: 8px; color: var(--suave); font-size: 12px; }

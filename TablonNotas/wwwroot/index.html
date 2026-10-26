@@ -2,12 +2,88 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tablón de notas</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Tablón de notas</h1>
-  <p id="estado">Cargando...</p>
+  <div class="app">
+
+    <!-- BARRA LATERAL -->
+    <aside class="barra">
+      <div class="barra-cabecera">
+        <p class="logo">Tablón de notas</p>
+        <button class="btn-nuevo" type="button">+ Nuevo tablón</button>
+      </div>
+
+      <div class="buscar">
+        <input type="search" placeholder="Buscar notas" aria-label="Buscar notas">
+        <kbd>Ctrl K</kbd>
+      </div>
+
+      <nav class="barra-nav" aria-label="Tablones">
+        <a class="enlace" href="#">Todos los tablones</a>
+        <a class="enlace" href="#">Recordatorios</a>
+        <a class="enlace" href="#">Calendario</a>
+
+        <p class="seccion">Favoritos</p>
+        <a class="enlace" href="#">Diario</a>
+        <a class="enlace" href="#">Lecturas</a>
+
+        <p class="seccion">Mis tablones</p>
+        <a class="enlace" href="#" aria-current="page">Ideas de la app</a>
+        <a class="enlace" href="#">Personal</a>
+        <a class="enlace" href="#">Trabajo</a>
+        <a class="enlace" href="#">Estudios</a>
+        <a class="enlace" href="#">Viajes</a>
+      </nav>
+
+      <div class="barra-pie">
+        <button class="enlace" type="button">Ajustes</button>
+        <button class="enlace" type="button">Modo oscuro</button>
+      </div>
+    </aside>
+
+    <!-- ÁREA PRINCIPAL -->
+    <main class="principal">
+      <header class="cabecera">
+        <h1 class="titulo">Ideas de la app</h1>
+        <p class="meta">8 notas · actualizado hace 5 min</p>
+      </header>
+
+      <!-- Cada nota guarda su posición y tamaño en celdas con variables CSS -->
+      <section class="tablon" data-guia="puntos" aria-label="Tablón">
+
+        <article class="nota nota--amarilla" style="--col:2; --fila:2; --ancho:7; --alto:7">
+          <h2 class="nota-titulo">Lista de la compra</h2>
+          <ul class="nota-lista">
+            <li>Leche</li>
+            <li>Pan integral</li>
+            <li>Huevos</li>
+            <li>Fruta de temporada</li>
+            <li>Café</li>
+          </ul>
+          <p class="nota-fecha">Hoy · 10:24</p>
+        </article>
+
+        <article class="nota nota--azul" style="--col:10; --fila:2; --ancho:7; --alto:4">
+          <h2 class="nota-titulo">Recordatorio</h2>
+          <p>Llamar para pedir cita. Mañana a las 10:00.</p>
+          <p class="nota-fecha">Mañana · 10:00</p>
+        </article>
+
+        <article class="nota nota--verde" style="--col:17; --fila:2; --ancho:7; --alto:7">
+          <h2 class="nota-titulo">Rutina de entreno</h2>
+          <p><strong>Lunes</strong><br>Pecho y tríceps</p>
+          <p><strong>Martes</strong><br>Pierna</p>
+          <p><strong>Jueves</strong><br>Espalda y bíceps</p>
+          <p class="nota-fecha">Ayer</p>
+        </article>
+
+      </section>
+    </main>
+
+  </div>
   <script src="app.js"></script>
 </body>
 </html>
