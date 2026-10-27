@@ -1,0 +1,93 @@
+<!-- Ventana del editor de notas. Se carga desde editor.js y se añade a la página. -->
+<dialog class="editor" id="editor" aria-label="Editar nota">
+
+	<!-- Arriba: título, información y colores de la nota -->
+	<div class="editor-cabecera">
+		<div class="editor-titular">
+			<input class="editor-titulo" id="editor-titulo" type="text" placeholder="Título" aria-label="Título de la nota" maxlength="120">
+				<p class="editor-meta" id="editor-meta"></p>
+			</div>
+		<div class="colores" id="editor-colores" role="group" aria-label="Color de la nota"></div>
+	</div>
+
+	<!-- Centro: el texto de la nota -->
+	<div class="editor-cuerpo" id="editor-cuerpo" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Contenido de la nota" spellcheck="true"></div>
+
+	<!-- Abajo: barra de formato, justo encima de los botones -->
+	<div class="editor-barra" id="editor-barra" role="toolbar" aria-label="Formato del texto">
+		<div class="grupo">
+			<select id="fmt-fuente" aria-label="Fuente">
+				<option value="" selected="" disabled="">Fuente</option>
+				<option value="Segoe UI">Segoe UI</option>
+				<option value="Arial">Arial</option>
+				<option value="Georgia">Georgia</option>
+				<option value="Times New Roman">Times New Roman</option>
+				<option value="Consolas">Consolas</option>
+				<option value="Segoe Print">Segoe Print</option>
+			</select>
+			<select id="fmt-tamano" aria-label="Tamaño del texto">
+				<option value="" selected="" disabled="">Tamaño</option>
+				<option value="2">Pequeño</option>
+				<option value="3">Normal</option>
+				<option value="4">Mediano</option>
+				<option value="5">Grande</option>
+				<option value="6">Enorme</option>
+			</select>
+		</div>
+		<div class="grupo">
+			<button type="button" data-cmd="bold" aria-pressed="false" aria-label="Negrita" title="Negrita (Ctrl+B)">
+				<b>B</b>
+			</button>
+			<button type="button" data-cmd="italic" aria-pressed="false" aria-label="Cursiva" title="Cursiva (Ctrl+I)">
+				<i>I</i>
+			</button>
+			<button type="button" data-cmd="underline" aria-pressed="false" aria-label="Subrayado" title="Subrayado (Ctrl+U)">
+				<u>U</u>
+			</button>
+			<button type="button" data-cmd="strikeThrough" aria-pressed="false" aria-label="Tachado" title="Tachado">
+				<s>S</s>
+			</button>
+		</div>
+		<div class="grupo">
+			<label class="color" title="Color del texto">
+				<span>A</span>
+				<input type="color" id="fmt-color" value="#d93a44" aria-label="Color del texto">
+			</label>
+			<label class="color" title="Resaltado">
+				<span class="resalte">ab</span>
+				<input type="color" id="fmt-resalte" value="#fff176" aria-label="Color de resaltado">
+			</label>
+		</div>
+		<div class="grupo">
+			<button type="button" data-cmd="insertUnorderedList" aria-pressed="false" aria-label="Lista con viñetas" title="Lista con viñetas">
+				<svg viewBox="0 0 16 16" aria-hidden="true">
+					<path d="M6 4h8M6 8h8M6 12h8M2 4h.01M2 8h.01M2 12h.01"/>
+				</svg>
+			</button>
+			<button type="button" data-cmd="insertOrderedList" aria-pressed="false" aria-label="Lista numerada" title="Lista numerada">
+				<svg viewBox="0 0 16 16" aria-hidden="true">
+					<path d="M7 4h7M7 8h7M7 12h7M2 3l1-.6V6M2 10.2c0-.9 1.8-.9 1.8 0 0 .9-1.8 1.2-1.8 2.1h1.9"/>
+				</svg>
+			</button>
+			<button type="button" id="fmt-tareas" aria-pressed="false" aria-label="Lista de tareas con casillas" title="Lista de tareas (casillas)">
+				<svg viewBox="0 0 16 16" aria-hidden="true">
+					<rect x="2" y="2" width="4" height="4" rx="1"/>
+					<rect x="2" y="10" width="4" height="4" rx="1"/>
+					<path d="M8 4h6M8 12h6M3 4l.8.8L5 3.4"/>
+				</svg>
+			</button>
+		</div>
+		<div class="grupo">
+			<button type="button" data-cmd="undo" aria-label="Deshacer" title="Deshacer (Ctrl+Z)">↶</button>
+			<button type="button" data-cmd="redo" aria-label="Rehacer" title="Rehacer (Ctrl+Y)">↷</button>
+			<button type="button" data-cmd="removeFormat" aria-label="Quitar formato" title="Quitar formato">Tx</button>
+		</div>
+	</div>
+
+	<footer class="editor-pie">
+		<button class="btn-eliminar" id="editor-eliminar" type="button">Eliminar</button>
+		<span class="espacio"></span>
+		<button class="btn-cancelar" id="editor-cancelar" type="button">Cancelar</button>
+		<button class="btn-aceptar" id="editor-aceptar" type="button">Aceptar</button>
+	</footer>
+</dialog>

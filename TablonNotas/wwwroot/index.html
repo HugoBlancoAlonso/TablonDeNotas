@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tablón de notas</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="editor/editor.css">
 </head>
 <body>
   <div class="app">
@@ -47,12 +48,26 @@
     <!-- ÁREA PRINCIPAL -->
     <main class="principal">
       <header class="cabecera">
-        <h1 class="titulo">Ideas de la app</h1>
-        <p class="meta">8 notas · actualizado hace 5 min</p>
+        <div>
+          <h1 class="titulo">Ideas de la app</h1>
+          <p class="meta">8 notas · actualizado hace 5 min</p>
+        </div>
+
+        <div class="acciones">
+          <div class="conmutador" role="group" aria-label="Tipo de vista">
+            <button class="vista" type="button" data-vista="cuadricula" aria-pressed="true" aria-label="Vista de cuadrícula" title="Cuadrícula">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
+            </button>
+            <button class="vista" type="button" data-vista="lista" aria-pressed="false" aria-label="Vista de lista" title="Lista">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 4h9M5 8h9M5 12h9M2 4h.01M2 8h.01M2 12h.01"/></svg>
+            </button>
+          </div>
+          <button class="btn-nota" id="btn-nueva-nota" type="button">+ Nueva nota</button>
+        </div>
       </header>
 
       <!-- Cada nota guarda su posición y tamaño en celdas con variables CSS -->
-      <section class="tablon" data-guia="puntos" aria-label="Tablón">
+      <section class="tablon" aria-label="Tablón">
 
         <article class="nota nota--amarilla" style="--col:2; --fila:2; --ancho:7; --alto:7">
           <h2 class="nota-titulo">Lista de la compra</h2>
@@ -84,6 +99,7 @@
     </main>
 
   </div>
-  <script src="app.js"></script>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>

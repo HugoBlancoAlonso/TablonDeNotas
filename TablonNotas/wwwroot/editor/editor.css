@@ -1,0 +1,150 @@
+/* Estilos de la ventana del editor de notas.
+   Usa las variables de color y forma definidas en ../style.css.
+   La ventana recibe la misma clase de color que la nota (nota--amarilla, nota--azul...),
+   así que toma su color de fondo de la variable --color. */
+
+.editor {
+  /* Tintes derivados del texto de la nota: sirven para cualquier color, claro u oscuro */
+  --vel: color-mix(in srgb, var(--nota-texto) 8%, transparent);
+  --vel-fuerte: color-mix(in srgb, var(--nota-texto) 16%, transparent);
+
+  width: min(720px, 92vw);
+  max-height: 82vh;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--nota-borde-color);
+  border-radius: calc(var(--radio-nota) + 4px);
+  background: var(--color, var(--campo));
+  color: var(--nota-texto);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  transition: background-color 0.2s;
+}
+.editor[open] { display: flex; flex-direction: column; }
+.editor::backdrop { background: rgba(15, 20, 30, 0.45); }
+
+/* ---------- Arriba: título y colores ---------- */
+.editor-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px 16px;
+  padding: 16px 20px 8px;
+}
+.editor-titular { flex: 1; min-width: 220px; }
+.editor-titulo {
+  width: 100%;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: var(--nota-texto);
+  font: 700 22px var(--fuente);
+}
+.editor-titulo::placeholder { color: var(--nota-suave); }
+.editor-titulo:focus-visible { outline: none; box-shadow: 0 2px 0 var(--acento); }
+.editor-meta { margin: 2px 0 0; color: var(--nota-suave); font-size: 12px; }
+
+.colores { display: grid; grid-template-columns: repeat(6, 22px); gap: 6px; }
+.muestra {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 2px solid var(--nota-borde-color);
+  border-radius: 50%;
+  background: var(--c);
+  cursor: pointer;
+}
+.muestra:hover { border-color: var(--nota-suave); }
+.muestra[aria-pressed="true"] {
+  border-color: var(--nota-texto);
+  box-shadow: inset 0 0 0 2px var(--color, var(--campo));
+}
+.muestra:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+/* ---------- Centro: el texto ---------- */
+.editor-cuerpo {
+  flex: 1;
+  min-height: 220px;
+  padding: 8px 20px 16px;
+  overflow-y: auto;
+  font: 15px/1.55 var(--fuente);
+}
+.editor-cuerpo:focus-visible { outline: none; }
+.editor-cuerpo p { margin: 0 0 8px; }
+.editor-cuerpo ul, .editor-cuerpo ol { margin: 4px 0; padding-left: 24px; }
+.editor-cuerpo .tareas { padding-left: 0; }
+
+/* ---------- Abajo: barra de formato (encima de los botones) ---------- */
+.editor-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  padding: 8px 14px;
+  background: var(--vel);
+  border-top: 1px solid var(--nota-borde-color);
+}
+.editor-barra .grupo { display: flex; align-items: center; gap: 2px; }
+.editor-barra select {
+  height: 30px;
+  padding: 0 6px;
+  border: 1px solid var(--nota-borde-color);
+  border-radius: 6px;
+  background: var(--vel);
+  color: var(--nota-texto);
+  font: 13px var(--fuente);
+}
+.editor-barra option { background: var(--campo); color: var(--texto); }
+.editor-barra button, .editor-barra .color {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--nota-texto);
+  font: 14px var(--fuente);
+  cursor: pointer;
+}
+.editor-barra button:hover, .editor-barra .color:hover { background: var(--vel-fuerte); }
+.editor-barra button[aria-pressed="true"] {
+  background: var(--vel-fuerte);
+  box-shadow: inset 0 0 0 1px var(--nota-borde-color);
+}
+.editor-barra svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.editor-barra .color span { font-weight: 700; border-bottom: 3px solid var(--c, currentColor); line-height: 1.1; }
+.editor-barra .color span.resalte { padding: 0 2px; background: var(--c, #fff176); color: #1b2230; border-bottom: 0; }
+.editor-barra .color input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.editor-barra :focus-visible { outline: 2px solid var(--acento); outline-offset: 1px; }
+
+/* ---------- Pie: botones ---------- */
+.editor-pie {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+}
+.editor-pie .espacio { flex: 1; }
+.editor-pie button {
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--radio-control);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-aceptar { background: var(--nota-texto); color: var(--color, var(--campo)); }
+.btn-cancelar { background: none; border-color: var(--nota-borde-color) !important; color: var(--nota-texto); }
+.btn-eliminar { background: var(--peligro); color: #fff; }
+.editor-pie button:hover { filter: brightness(1.1); }
+.editor-pie :focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }

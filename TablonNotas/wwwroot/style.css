@@ -1,23 +1,88 @@
-/* ---------- Variables: aquí se cambia el aspecto de toda la app ---------- */
+/* =====================================================================
+   VARIABLES: aquí se cambia el aspecto de toda la app.
+   Nada fuera de este bloque debería tener colores ni medidas "a mano".
+   ===================================================================== */
 :root {
-  --celda: 32px;            /* tamaño de cada celda de la cuadrícula */
+  /* Medidas de la estructura */
+  --celda: 32px;
   --ancho-barra: 260px;
 
+  /* Colores de la app (tema claro) */
   --fondo: #f7f8fa;
   --barra: #eef0f4;
+  --campo: #ffffff;
   --texto: #1b2230;
   --suave: #667085;
   --borde: #d9dde5;
   --punto: #c9ced8;
-  --acento: #2750d8;
+  --acento: #d93a44;
   --acento-texto: #ffffff;
-  --activo: #dfe5f7;
+  --activo: #e2e5eb;
+  --peligro: #c9262e;
 
+  /* Colores de las notas */
   --nota-amarilla: #fff4bf;
   --nota-azul: #dbe8ff;
   --nota-verde: #d9f2df;
-  --nota-borde: rgba(27, 34, 48, 0.18);
-  --radio: 10px;
+  --nota-naranja: #ffe0bd;
+  --nota-coral: #ffd3cf;
+  --nota-rosa: #ffd6e8;
+  --nota-lila: #e6dcff;
+  --nota-celeste: #d0f0fb;
+  --nota-turquesa: #cdf3ec;
+  --nota-lima: #eaf5c4;
+  --nota-arena: #efe4d3;
+  --nota-gris: #e6e9ee;
+  --nota-texto: #1b2230;
+  --nota-suave: #5b6475;
+  --nota-borde-color: rgba(27, 34, 48, 0.18);
+  --nota-sombra: 0 1px 2px rgba(0, 0, 0, 0.08);
+
+  /* Formas */
+  --radio-nota: 10px;      /* esquinas de las notas */
+  --radio-control: 8px;    /* botones, buscador, enlaces */
+  --radio-pequeno: 4px;    /* etiquetas como Ctrl K */
+  --borde-nota: 1px;       /* grosor del borde de las notas */
+  --margen-nota: 4px;      /* hueco entre la nota y su celda */
+  --relleno-nota: 12px 14px;
+
+  /* Tipografía */
+  --fuente: "Segoe UI", system-ui, sans-serif;
+  --tam-texto: 14px;
+  --tam-titulo: 22px;
+  --tam-titulo-nota: 15px;
+}
+
+/* Tema oscuro: solo cambia valores de variables, no hay más CSS */
+:root[data-tema="oscuro"] {
+  --fondo: #151a22;
+  --barra: #1b212b;
+  --campo: #222a36;
+  --texto: #e8ecf3;
+  --suave: #9aa4b5;
+  --borde: #2e3744;
+  --punto: #2e3744;
+  --acento: #ff7a80;
+  --acento-texto: #101521;
+  --activo: #2b3340;
+  --peligro: #d4343c;
+
+  --nota-amarilla: #4a4220;
+  --nota-azul: #243651;
+  --nota-verde: #234031;
+  --nota-naranja: #4d3720;
+  --nota-coral: #4f2b2b;
+  --nota-rosa: #4d2a3d;
+  --nota-lila: #3a3156;
+  --nota-celeste: #1f3f4d;
+  --nota-turquesa: #1f4642;
+  --nota-lima: #3c4620;
+  --nota-arena: #403a2f;
+  --nota-gris: #343a45;
+  --nota-texto: #f0f2f7;
+  --nota-suave: #aab3c2;
+  --nota-borde-color: rgba(255, 255, 255, 0.16);
+  --nota-sombra: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -28,7 +93,7 @@ body {
   margin: 0;
   background: var(--fondo);
   color: var(--texto);
-  font: 14px/1.45 "Segoe UI", system-ui, sans-serif;
+  font: var(--tam-texto)/1.45 var(--fuente);
 }
 
 /* ---------- Estructura general ---------- */
@@ -55,7 +120,7 @@ body {
 .btn-nuevo {
   padding: 8px 12px;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radio-control);
   background: var(--acento);
   color: var(--acento-texto);
   font: inherit;
@@ -69,8 +134,8 @@ body {
   width: 100%;
   padding: 8px 56px 8px 10px;
   border: 1px solid var(--borde);
-  border-radius: 8px;
-  background: var(--fondo);
+  border-radius: var(--radio-control);
+  background: var(--campo);
   color: var(--texto);
   font: inherit;
 }
@@ -81,9 +146,9 @@ body {
   transform: translateY(-50%);
   padding: 1px 6px;
   border: 1px solid var(--borde);
-  border-radius: 4px;
+  border-radius: var(--radio-pequeno);
   color: var(--suave);
-  font: 11px "Segoe UI", sans-serif;
+  font: 11px var(--fuente);
 }
 
 .barra-nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
@@ -102,7 +167,7 @@ body {
   width: 100%;
   padding: 7px 10px;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radio-control);
   background: none;
   color: var(--texto);
   font: inherit;
@@ -127,11 +192,11 @@ body {
 /* ---------- Área principal ---------- */
 .principal { display: flex; flex-direction: column; min-width: 0; }
 
-.cabecera { padding: 20px 24px 12px; }
-.titulo { margin: 0; font-size: 22px; font-weight: 700; }
+
+.titulo { margin: 0; font-size: var(--tam-titulo); font-weight: 700; }
 .meta { margin: 2px 0 0; color: var(--suave); }
 
-/* ---------- Tablón: cuadrícula de celdas con puntos de guía ---------- */
+/* ---------- Tablón: cuadrícula de celdas ---------- */
 .tablon {
   flex: 1;
   display: grid;
@@ -139,29 +204,159 @@ body {
   grid-auto-rows: var(--celda);
   overflow: auto;
   background-size: var(--celda) var(--celda);
+  background-image: radial-gradient(var(--punto) 1px, transparent 1px); /* puntos por defecto */
 }
-
-.tablon[data-guia="puntos"] { background-image: radial-gradient(var(--punto) 1px, transparent 1px); }
-.tablon[data-guia="lineas"] { background-image: linear-gradient(var(--punto) 1px, transparent 1px), linear-gradient(90deg, var(--punto) 1px, transparent 1px); }
+/* Guías opcionales: se eligen con data-guia="lineas" o data-guia="ninguna" */
+.tablon[data-guia="lineas"] {
+  background-image:
+    linear-gradient(var(--punto) 1px, transparent 1px),
+    linear-gradient(90deg, var(--punto) 1px, transparent 1px);
+}
 .tablon[data-guia="ninguna"] { background-image: none; }
 
 /* ---------- Notas ---------- */
 .nota {
   grid-column: var(--col) / span var(--ancho);
   grid-row: var(--fila) / span var(--alto);
-  margin: 4px;
-  padding: 12px 14px;
+  margin: var(--margen-nota);
+  padding: var(--relleno-nota);
   overflow: hidden;
   background: var(--color, var(--nota-amarilla));
-  border: 1px solid var(--nota-borde);
-  border-radius: var(--radio);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  color: var(--nota-texto);
+  border: var(--borde-nota) solid var(--nota-borde-color);
+  border-radius: var(--radio-nota);
+  box-shadow: var(--nota-sombra);
 }
 .nota--amarilla { --color: var(--nota-amarilla); }
 .nota--azul { --color: var(--nota-azul); }
 .nota--verde { --color: var(--nota-verde); }
+.nota--naranja { --color: var(--nota-naranja); }
+.nota--coral { --color: var(--nota-coral); }
+.nota--rosa { --color: var(--nota-rosa); }
+.nota--lila { --color: var(--nota-lila); }
+.nota--celeste { --color: var(--nota-celeste); }
+.nota--turquesa { --color: var(--nota-turquesa); }
+.nota--lima { --color: var(--nota-lima); }
+.nota--arena { --color: var(--nota-arena); }
+.nota--gris { --color: var(--nota-gris); }
 
-.nota-titulo { margin: 0 0 6px; font-size: 15px; font-weight: 700; }
+.nota-titulo { margin: 0 0 6px; font-size: var(--tam-titulo-nota); font-weight: 700; }
 .nota p { margin: 0 0 6px; }
 .nota-lista { margin: 0 0 6px; padding-left: 18px; }
-.nota-fecha { margin-top: 8px; color: var(--suave); font-size: 12px; }
+.nota-fecha { margin-top: 8px; color: var(--nota-suave); font-size: 12px; }
+
+/* ---------- Cabecera con acciones ---------- */
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px 12px;
+}
+.acciones { display: flex; align-items: center; gap: 12px; }
+
+.conmutador {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--campo);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-control);
+}
+.vista {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 28px;
+  border: 0;
+  border-radius: calc(var(--radio-control) - 3px);
+  background: none;
+  color: var(--suave);
+  cursor: pointer;
+}
+.vista:hover { color: var(--texto); }
+.vista[aria-pressed="true"] { background: var(--activo); color: var(--texto); }
+.vista svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.btn-nota {
+  padding: 8px 14px;
+  border: 0;
+  border-radius: var(--radio-control);
+  background: var(--acento);
+  color: var(--acento-texto);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-nota:hover { filter: brightness(1.08); }
+.vista:focus-visible, .btn-nota:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+
+/* ---------- Vista de lista: las notas se apilan a todo el ancho ---------- */
+.tablon[data-vista="lista"] {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 24px 24px;
+  background-image: none;
+}
+.tablon[data-vista="lista"] .nota { flex: none; margin: 0; }
+
+/* ---------- Arrastrar notas ---------- */
+.tablon:not([data-vista="lista"]) .nota { cursor: grab; touch-action: none; }
+.nota.arrastrando {
+  cursor: grabbing;
+  opacity: 0.92;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+}
+.tablon.moviendo { cursor: grabbing; user-select: none; }
+
+/* Recuadro que marca la celda de destino mientras se arrastra */
+.nota-fantasma {
+  grid-column: var(--col) / span var(--ancho);
+  grid-row: var(--fila) / span var(--alto);
+  margin: var(--margen-nota);
+  border: 2px dashed var(--acento);
+  border-radius: var(--radio-nota);
+  background: color-mix(in srgb, var(--acento) 10%, transparent);
+  pointer-events: none;
+}
+
+/* ---------- Contenido de las notas: listas de tareas ---------- */
+.nota-cuerpo > :last-child { margin-bottom: 0; }
+.tareas { list-style: none; margin: 4px 0; padding-left: 0; }
+.tareas > li { position: relative; margin: 3px 0; padding-left: 26px; min-height: 1.4em; }
+.tareas > li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.22em;
+  width: 15px;
+  height: 15px;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  opacity: 0.7;
+}
+.tareas > li[data-hecho="true"] { text-decoration: line-through; opacity: 0.65; }
+.tareas > li[data-hecho="true"]::before { background: var(--acento); border-color: var(--acento); opacity: 1; }
+.tareas > li[data-hecho="true"]::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 0.38em;
+  width: 4px;
+  height: 8px;
+  border: solid var(--acento-texto);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}

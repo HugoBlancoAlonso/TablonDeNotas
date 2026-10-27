@@ -1,4 +1,5 @@
-// Aquí irá la lógica del tablón: crear notas, arrastrar y redimensionar.
-// Por ahora está vacío a propósito: el app.js anterior buscaba un elemento
-// con id "estado" que ya no existe en la nueva página.
+// Punto de entrada de la app: carga el tablón y el editor de notas.
+import "./tablon.js";
+import "./editor/editor.js";
+
 console.log("Tablón de notas cargado");
