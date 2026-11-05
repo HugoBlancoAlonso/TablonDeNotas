@@ -1,5 +1,6 @@
 // Tablón: cuadrícula, notas, arrastrar y redimensionar.
 // Es un módulo: exporta lo que necesita el editor (tablon, COLORES, datosNota...).
+import { enviar } from "./puente.js";
 
 // ---------- Tablón: crear una nota con doble clic ----------
 // Estado compartido con el editor: true justo después de arrastrar o redimensionar (para no abrir la nota)
@@ -63,6 +64,7 @@ function crearNota(col, fila) {
     '<div class="nota-cuerpo" data-vacio="true"><p>Escribe aquí…</p></div>' +
     '<p class="nota-fecha">Ahora</p>';
   tablon.appendChild(nota);
+  enviar("nota.guardar", datosCompletos(nota)); // C# guarda la nota nueva
   return nota;
 }
 
@@ -142,9 +144,22 @@ export function datosNota(nota) {
   };
 }
 
-// En la fase 4 aquí se enviará el mensaje a C# para guardar la nueva posición
+// La nota entera, tal como la guarda C# (ver NotaDatos en Mensajes.cs)
+export function datosCompletos(nota) {
+  const cuerpo = nota.querySelector(".nota-cuerpo");
+  const clase = COLORES.find((c) => nota.classList.contains(c)) || COLORES[0];
+  return {
+    ...datosNota(nota),
+    tablonId: tablon.dataset.id || "ideas-de-la-app",
+    color: clase.replace("nota--", ""),
+    titulo: nota.querySelector(".nota-titulo").textContent,
+    html: !cuerpo || cuerpo.dataset.vacio ? "" : cuerpo.innerHTML, // una nota recién creada está vacía
+  };
+}
+
+// Avisa a C# para que guarde la nueva posición
 function notaMovida(nota) {
-  console.log("Nota movida:", datosNota(nota));
+  enviar("nota.guardar", datosCompletos(nota));
 }
 
 // Columna y fila donde caería la nota si se soltara ahora
@@ -270,9 +285,9 @@ function aplicarMedidas(nota, medidas) {
   nota.style.setProperty("--alto", medidas.alto);
 }
 
-// En la fase 4 aquí se enviará el mensaje a C# para guardar el nuevo tamaño
+// Avisa a C# para que guarde el nuevo tamaño
 function notaRedimensionada(nota) {
-  console.log("Nota redimensionada:", datosNota(nota));
+  enviar("nota.guardar", datosCompletos(nota));
 }
 
 // Nueva posición y tamaño, en celdas, según el borde que se arrastra y lo que se ha movido el ratón
@@ -361,6 +376,7 @@ tablon.addEventListener("pointercancel", terminarRedimension);
 // ---------- Estructura de cada nota ----------
 // Todas las notas tienen: título (h2), cuerpo (div) y fecha (p). Las de ejemplo se adaptan aquí.
 export function normalizarNota(nota) {
+  if (!nota.dataset.id) nota.dataset.id = crypto.randomUUID(); // las notas de ejemplo también necesitan identificador
   if (nota.querySelector(".nota-cuerpo")) return;
   const titulo = nota.querySelector(".nota-titulo");
   const fecha = nota.querySelector(".nota-fecha");
@@ -372,3 +388,61 @@ export function normalizarNota(nota) {
   nota.insertBefore(cuerpo, fecha);
 }
 document.querySelectorAll(".nota").forEach(normalizarNota);
+
+// ---------- Notas que envía C# (mensaje "tablon.cargar") ----------
+// Convierte la fecha ISO que guarda C# en el texto que se ve en la nota
+function etiquetaFecha(iso) {
+  if (!iso) return "";
+  const fecha = new Date(iso);
+  const hoy = new Date();
+  const dias = Math.round(
+    (new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) -
+      new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate())) / 86400000
+  );
+  if (dias <= 0) return "Hoy · " + fecha.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+  if (dias === 1) return "Ayer";
+  if (dias < 7) return "Hace " + dias + " días";
+  return fecha.toLocaleDateString("es-ES", { day: "numeric", month: "short" });
+}
+
+// Dibuja una nota a partir de sus datos (NotaDatos en Mensajes.cs). No avisa a C#: ya la tiene guardada.
+export function dibujarNota(datos) {
+  const nota = document.createElement("article");
+  const clase = "nota--" + datos.color;
+  nota.className = "nota " + (COLORES.includes(clase) ? clase : COLORES[0]);
+  nota.dataset.id = datos.id;
+  nota.style.setProperty("--col", datos.col);
+  nota.style.setProperty("--fila", datos.fila);
+  nota.style.setProperty("--ancho", datos.ancho);
+  nota.style.setProperty("--alto", datos.alto);
+
+  const titulo = document.createElement("h2");
+  titulo.className = "nota-titulo";
+  titulo.textContent = datos.titulo;
+
+  const cuerpo = document.createElement("div");
+  cuerpo.className = "nota-cuerpo";
+  if (datos.html) {
+    cuerpo.innerHTML = datos.html; // el HTML lo escribió el propio usuario con el editor
+  } else {
+    cuerpo.dataset.vacio = "true";
+    cuerpo.innerHTML = "<p>Escribe aquí…</p>";
+  }
+
+  const fecha = document.createElement("p");
+  fecha.className = "nota-fecha";
+  fecha.textContent = etiquetaFecha(datos.modificada);
+
+  nota.append(titulo, cuerpo, fecha);
+  tablon.appendChild(nota);
+  return nota;
+}
+
+// Sustituye lo que haya en el tablón por lo que manda C#
+export function cargarTablon(datos) {
+  tablon.dataset.id = datos.tablonId;
+  document.querySelector(".titulo").textContent = datos.nombre;
+  tablon.querySelectorAll(".nota").forEach((nota) => nota.remove());
+  datos.notas.forEach(dibujarNota);
+  actualizarContador();
+}

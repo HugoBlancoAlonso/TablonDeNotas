@@ -1,6 +1,7 @@
 // Editor de notas: ventana que se abre al hacer clic en una nota.
 // El marcado está en editor.html y los estilos en editor.css.
-import { tablon, COLORES, datosNota, actualizarContador, normalizarNota, estado } from "../tablon.js";
+import { tablon, COLORES, datosNota, datosCompletos, actualizarContador, normalizarNota, estado } from "../tablon.js";
+import { enviar } from "../puente.js";
 
 // El marcado de la ventana se carga una vez y se añade a la página
 const respuesta = await fetch(new URL("editor.html", import.meta.url));
@@ -26,25 +27,52 @@ function horaActual() {
   return new Date().toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
 }
 
-// En la fase 4 estos mensajes se enviarán a C# para guardar los cambios
+// Avisan a C# para que guarde los cambios
 function notaEditada(nota) {
-  console.log("Nota editada:", {
-    ...datosNota(nota),
-    titulo: nota.querySelector(".nota-titulo").textContent,
-    html: nota.querySelector(".nota-cuerpo").innerHTML,
-  });
+  enviar("nota.guardar", datosCompletos(nota));
 }
 function notaEliminada(datos) {
-  console.log("Nota eliminada:", datos);
+  enviar("nota.eliminar", { id: datos.id });
 }
 
 // --- Abrir con un clic (si no venimos de arrastrar o redimensionar) ---
 tablon.addEventListener("pointerdown", () => { estado.ignorarClic = false; }, true);
+// --- Casillas de las tareas (funcionan en la nota del tablón y dentro del editor) ---
+const ZONA_CASILLA = 26; // píxeles, desde el borde izquierdo de la tarea, donde está la casilla
+
+function enCasilla(tarea, evento) {
+  return evento.clientX - tarea.getBoundingClientRect().left <= ZONA_CASILLA;
+}
+
+function alternarTarea(tarea) {
+  if (tarea.dataset.hecho === "true") tarea.removeAttribute("data-hecho");
+  else tarea.dataset.hecho = "true";
+}
+
 tablon.addEventListener("click", (evento) => {
   const nota = evento.target.closest(".nota");
   if (!nota) return;
   if (estado.ignorarClic) { estado.ignorarClic = false; return; }
+
+  // Clic en la casilla de una tarea: se marca o desmarca sin abrir la nota.
+  // Se usa elementFromPoint porque, tras un clic con captura de puntero, evento.target es la nota entera.
+  const bajoRaton = document.elementFromPoint(evento.clientX, evento.clientY);
+  const tarea = bajoRaton && bajoRaton.closest(".tareas > li");
+  if (tarea && nota.contains(tarea) && enCasilla(tarea, evento)) {
+    alternarTarea(tarea);
+    notaEditada(nota); // en la fase 4 se enviará a C# para guardar el cambio
+    return;
+  }
   abrirNota(nota);
+});
+
+// El cursor se convierte en una mano al pasar por una casilla (se ejecuta después del cursor de bordes de tablon.js)
+tablon.addEventListener("pointermove", (evento) => {
+  if (evento.buttons) return; // no durante un arrastre
+  const tarea = evento.target.closest(".tareas > li");
+  if (!tarea || !enCasilla(tarea, evento)) return;
+  const nota = tarea.closest(".nota");
+  if (nota) nota.style.cursor = "pointer";
 });
 
 function ponerCursorAlFinal() {
@@ -175,7 +203,11 @@ function ejecutar(comando, valor = null) {
 
 function listaActual() {
   const seleccion = window.getSelection();
-  const nodo = seleccion.anchorNode && (seleccion.anchorNode.nodeType === 1 ? seleccion.anchorNode : seleccion.anchorNode.parentElement);
+  let nodo = seleccion.anchorNode;
+  if (!nodo) return null;
+  // Con el editor vacío, tras crear una lista el cursor puede quedar en el propio editor y no dentro del <li>
+  if (nodo === cuerpoEditor) nodo = cuerpoEditor.childNodes[seleccion.anchorOffset] || cuerpoEditor.lastChild;
+  if (nodo && nodo.nodeType !== 1) nodo = nodo.parentElement;
   const lista = nodo && nodo.closest("ul, ol");
   return lista && cuerpoEditor.contains(lista) ? lista : null;
 }
@@ -189,8 +221,10 @@ function alternarTareas() {
   } else if (lista && lista.tagName === "UL") {
     lista.classList.add("tareas");
   } else {
+    const antes = new Set(cuerpoEditor.querySelectorAll("ul"));
     document.execCommand("insertUnorderedList");
-    const nueva = listaActual();
+    // La lista nueva no siempre está bajo el cursor (pasa con el editor vacío): se busca también por diferencia
+    const nueva = listaActual() || [...cuerpoEditor.querySelectorAll("ul")].find((ul) => !antes.has(ul));
     if (nueva) nueva.classList.add("tareas");
   }
   actualizarBarra();
@@ -243,9 +277,7 @@ document.getElementById("fmt-resalte").addEventListener("input", (evento) => {
 cuerpoEditor.addEventListener("click", (evento) => {
   const tarea = evento.target.closest(".tareas > li");
   if (!tarea || !cuerpoEditor.contains(tarea)) return;
-  if (evento.clientX - tarea.getBoundingClientRect().left > 26) return;
-  if (tarea.dataset.hecho === "true") tarea.removeAttribute("data-hecho");
-  else tarea.dataset.hecho = "true";
+  if (enCasilla(tarea, evento)) alternarTarea(tarea);
 });
 
 // Al pulsar Enter en una tarea, la nueva tarea empieza sin marcar

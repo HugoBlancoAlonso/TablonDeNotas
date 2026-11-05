@@ -16,4 +16,12 @@
 	  <Content Include="wwwroot\**\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="wwwroot\Mensajes.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Mensajes.cs" />
+  </ItemGroup>
+
 </Project>

@@ -1,105 +1,86 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tablón de notas</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="editor/editor.css">
+	<head>
+		<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+				<title>Tablón de notas</title>
+				<link rel="stylesheet" href="style.css">
+					<link rel="stylesheet" href="editor/editor.css">
 </head>
-<body>
-  <div class="app">
+	<body>
+		<div class="app">
 
-    <!-- BARRA LATERAL -->
-    <aside class="barra">
-      <div class="barra-cabecera">
-        <p class="logo">Tablón de notas</p>
-        <button class="btn-nuevo" type="button">+ Nuevo tablón</button>
-      </div>
+			<!-- BARRA LATERAL -->
+			<aside class="barra">
+				<div class="barra-cabecera">
+					<p class="logo">Tablón de notas</p>
+					<button class="btn-nuevo" type="button">+ Nuevo tablón</button>
+				</div>
 
-      <div class="buscar">
-        <input type="search" placeholder="Buscar notas" aria-label="Buscar notas">
-        <kbd>Ctrl K</kbd>
-      </div>
+				<div class="buscar">
+					<input type="search" placeholder="Buscar notas" aria-label="Buscar notas">
+						<kbd>Ctrl K</kbd>
+					</div>
 
-      <nav class="barra-nav" aria-label="Tablones">
-        <a class="enlace" href="#">Todos los tablones</a>
-        <a class="enlace" href="#">Recordatorios</a>
-        <a class="enlace" href="#">Calendario</a>
+				<nav class="barra-nav" aria-label="Tablones">
+					<a class="enlace" href="#">Todos los tablones</a>
+					<a class="enlace" href="#">Recordatorios</a>
+					<a class="enlace" href="#">Calendario</a>
 
-        <p class="seccion">Favoritos</p>
-        <a class="enlace" href="#">Diario</a>
-        <a class="enlace" href="#">Lecturas</a>
+					<p class="seccion">Favoritos</p>
+					<a class="enlace" href="#">Diario</a>
+					<a class="enlace" href="#">Lecturas</a>
 
-        <p class="seccion">Mis tablones</p>
-        <a class="enlace" href="#" aria-current="page">Ideas de la app</a>
-        <a class="enlace" href="#">Personal</a>
-        <a class="enlace" href="#">Trabajo</a>
-        <a class="enlace" href="#">Estudios</a>
-        <a class="enlace" href="#">Viajes</a>
-      </nav>
+					<p class="seccion">Mis tablones</p>
+					<a class="enlace" href="#" aria-current="page">Ideas de la app</a>
+					<a class="enlace" href="#">Personal</a>
+					<a class="enlace" href="#">Trabajo</a>
+					<a class="enlace" href="#">Estudios</a>
+					<a class="enlace" href="#">Viajes</a>
+				</nav>
 
-      <div class="barra-pie">
-        <button class="enlace" type="button">Ajustes</button>
-        <button class="enlace" type="button">Modo oscuro</button>
-      </div>
-    </aside>
+				<div class="barra-pie">
+					<button class="enlace" type="button">Ajustes</button>
+					<button class="enlace" type="button">Modo oscuro</button>
+				</div>
+			</aside>
 
-    <!-- ÁREA PRINCIPAL -->
-    <main class="principal">
-      <header class="cabecera">
-        <div>
-          <h1 class="titulo">Ideas de la app</h1>
-          <p class="meta">8 notas · actualizado hace 5 min</p>
-        </div>
+			<!-- ÁREA PRINCIPAL -->
+			<main class="principal">
+				<header class="cabecera">
+					<div>
+						<h1 class="titulo">Ideas de la app</h1>
+						<p class="meta">Cargando…</p>
+					</div>
 
-        <div class="acciones">
-          <div class="conmutador" role="group" aria-label="Tipo de vista">
-            <button class="vista" type="button" data-vista="cuadricula" aria-pressed="true" aria-label="Vista de cuadrícula" title="Cuadrícula">
-              <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
-            </button>
-            <button class="vista" type="button" data-vista="lista" aria-pressed="false" aria-label="Vista de lista" title="Lista">
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 4h9M5 8h9M5 12h9M2 4h.01M2 8h.01M2 12h.01"/></svg>
-            </button>
-          </div>
-          <button class="btn-nota" id="btn-nueva-nota" type="button">+ Nueva nota</button>
-        </div>
-      </header>
+					<div class="acciones">
+						<div class="conmutador" role="group" aria-label="Tipo de vista">
+							<button class="vista" type="button" data-vista="cuadricula" aria-pressed="true" aria-label="Vista de cuadrícula" title="Cuadrícula">
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<rect x="2" y="2" width="5" height="5" rx="1"/>
+									<rect x="9" y="2" width="5" height="5" rx="1"/>
+									<rect x="2" y="9" width="5" height="5" rx="1"/>
+									<rect x="9" y="9" width="5" height="5" rx="1"/>
+								</svg>
+							</button>
+							<button class="vista" type="button" data-vista="lista" aria-pressed="false" aria-label="Vista de lista" title="Lista">
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<path d="M5 4h9M5 8h9M5 12h9M2 4h.01M2 8h.01M2 12h.01"/>
+								</svg>
+							</button>
+						</div>
+						<button class="btn-nota" id="btn-nueva-nota" type="button">+ Nueva nota</button>
+					</div>
+				</header>
 
-      <!-- Cada nota guarda su posición y tamaño en celdas con variables CSS -->
-      <section class="tablon" aria-label="Tablón">
+				<!-- Cada nota guarda su posición y tamaño en celdas con variables CSS -->
+				<section class="tablon" data-id="ideas-de-la-app" aria-label="Tablón">
+					<!-- Las notas las envía C# con el mensaje "tablon.cargar" -->
+				</section>
+			</main>
 
-        <article class="nota nota--amarilla" style="--col:2; --fila:2; --ancho:7; --alto:7">
-          <h2 class="nota-titulo">Lista de la compra</h2>
-          <ul class="nota-lista">
-            <li>Leche</li>
-            <li>Pan integral</li>
-            <li>Huevos</li>
-            <li>Fruta de temporada</li>
-            <li>Café</li>
-          </ul>
-          <p class="nota-fecha">Hoy · 10:24</p>
-        </article>
+		</div>
 
-        <article class="nota nota--azul" style="--col:10; --fila:2; --ancho:7; --alto:4">
-          <h2 class="nota-titulo">Recordatorio</h2>
-          <p>Llamar para pedir cita. Mañana a las 10:00.</p>
-          <p class="nota-fecha">Mañana · 10:00</p>
-        </article>
-
-        <article class="nota nota--verde" style="--col:17; --fila:2; --ancho:7; --alto:7">
-          <h2 class="nota-titulo">Rutina de entreno</h2>
-          <p><strong>Lunes</strong><br>Pecho y tríceps</p>
-          <p><strong>Martes</strong><br>Pierna</p>
-          <p><strong>Jueves</strong><br>Espalda y bíceps</p>
-          <p class="nota-fecha">Ayer</p>
-        </article>
-
-      </section>
-    </main>
-
-  </div>
-
-  <script type="module" src="app.js"></script>
-</body>
-</html>
+		<script type="module" src="app.js"></script>
+	</body>
+</html>¡¡
